@@ -134,7 +134,7 @@ def processMenuEvents(option):
     elif option == 3:
         L_System(0.001,'FA', {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}, 60).draw(8)
     else:
-        L_System(0.01,'FX', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, 25).draw(4)
+        L_System(0.01,'FX', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, 25).draw(8)
         
 
 if __name__=='__main__':
