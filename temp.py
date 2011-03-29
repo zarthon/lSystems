@@ -5,8 +5,10 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 width = 800
 height = 800
-
-
+colorR=1.0
+colorB=0.0
+colorG=0.0
+matrix = []
 def Lindenmayer(axiom,rules):
 
     rules = rules.items()
@@ -66,35 +68,26 @@ class L_System(GenerateList):
         glVertex2d(self.offset,0)
         glEnd()
         glTranslated(self.offset,0,0)
-    def right(self):
+    def right(self): 
         glRotated(self.angle,0,0,1)
     def left(self):
         glRotated(-self.angle,0,0,1)
 ######################################
     def go(self):
-        self.turtle.up()
-        self.turtle.forward(self.size)
-        self.turtle.down()
-
+        glTranslated(self.offset,0,0)
     def save(self):
-        x, y = self.turtle.xcor(), self.turtle.ycor()
-        h, c = self.turtle.heading(), self.turtle.pencolor()
-        self.states.append((x, y, h, c))
-
+        global matrix
+        temp = glGetFloatv(GL_MODELVIEW_MATRIX)
+        matrix.append(temp)
     def restore(self):
-        turtle.up()
-        x, y, h, c = self.states.pop()
-        turtle.setx(x)
-        turtle.sety(y)
-        turtle.setheading(h)
-        turtle.pencolor(c)
-        turtle.down()
-
+        global matrix
+        temp = matrix.pop()
+        glLoadMatrixd(temp)
     def update(self):
         pass
 
     def draw(self, index):
-        glColor3d(1.0,0.0,0.0)
+        glColor3d(colorR,colorB,colorG)
         glLineWidth(1)
         glLoadIdentity()
         glPushMatrix()
@@ -105,8 +98,44 @@ class L_System(GenerateList):
 
 def display():
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT )
+    glColor3d(1.0,0.0,0.0)
 
+def createMenu():
+    menu = glutCreateMenu(processMenuEvents)
+    glutAddMenuEntry("Dragon",1)
+    glutAddMenuEntry("Snowflake",2)
+    glutAddMenuEntry("Sierpinsky",3)
+    glutAddMenuEntry("Plant",4)
+    submenu = glutCreateMenu(colorChange)
+    glutAddMenuEntry("Red",4)
+    glutAddMenuEntry("Orange",5)
+    glutCreateMenu(processMenuEvents)
+    glutAddSubMenu("color",submenu)
+    glutAddSubMenu("System",menu)
+    glutAttachMenu (GLUT_RIGHT_BUTTON)
+    glutPostRedisplay()
 
+def colorChange(option):
+    global colorR, colorB, colorG
+    if option == 4:
+        colorR = 1.0
+        colorB=0.0
+        colorG=0.0
+    elif option == 5:
+        colorR=0.9
+        colorB=0.6
+        colorG=0.5
+
+def processMenuEvents(option):
+    if option == 1:
+        L_System( 0.01,'FX', {'X': 'X+YF', 'Y': 'FX-Y'}, 90).draw(10)
+    elif option == 2:
+        L_System(0.01,'F++F++F',{'F':'F-F++F-F'},60).draw(6)
+    elif option == 3:
+        L_System(0.001,'FA', {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}, 60).draw(8)
+    else:
+        L_System(0.01,'FX', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, 25).draw(4)
+        
 
 if __name__=='__main__':
     glutInit(sys.argv)
@@ -115,18 +144,7 @@ if __name__=='__main__':
     glutInitWindowPosition(100, 100)
     glutCreateWindow("Simple OpenGL Examples")
     glutDisplayFunc(display)
-
-    fractals = {
-        'snowflake': L_System( 0.001,'F++F++F', {'F': 'F-F++F-F'}, 60),
-        'dragon': L_System( 0.01,'FX', {'X': 'X+YF', 'Y': 'FX-Y'}, 90),
-        'plant': L_System(0.001,'FX', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, 25),
-        'sierpinsky': L_System(0.001,'FA', {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}, 60),
-        'koch':L_System(0.001,'F',{'F':'F+F-F-F+F'},90)
-    }
-
-    name,num = sys.argv[1], int(sys.argv[2])
-
-    fractals[name].draw(num)
+    createMenu()
     glutMainLoop()
 
 
