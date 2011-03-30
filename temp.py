@@ -17,7 +17,7 @@ VARIABLES = None
 SIZE=None
 ITERATE=None
 SHAPE=''
-
+TOGGLE=False
 def Lindenmayer(axiom,rules):
 
     rules = rules.items()
@@ -72,6 +72,7 @@ class L_System(GenerateList):
     
 ##########################3
     def drawShape(self,which):
+        global SIZE
         if which == "line":
             glBegin(GL_LINES)
             glVertex2d(0,0)
@@ -86,9 +87,9 @@ class L_System(GenerateList):
             glEnd()
         elif which=="circle":
             glBegin(GL_LINE_LOOP)
-            for ang in range(0, 360, 2):
-                x = cos(ang*pi/180)
-                y = sin(ang*pi/180)
+            for ang in range(0, 360, 5):
+                x = cos(ang*pi/180)*SIZE
+                y = sin(ang*pi/180)*SIZE
                 glVertex2d(x, y)
             glEnd()
         glFlush()
@@ -128,7 +129,6 @@ def display():
     glClear( GL_COLOR_BUFFER_BIT )
     glColor3d(1.0,0.0,0.0)
 
-
 def file_handle():
     try:
         global AXIOM,RULES,ANGLE,SIZE,ITERATE,SHAPE
@@ -152,40 +152,73 @@ def file_handle():
                 ITERATE = int(temp[1].rstrip())
             elif temp[0] == "Sh":
                 SHAPE = temp[1].rstrip()
-        L_System( SIZE,AXIOM, RULES,ANGLE).draw(ITERATE)
     except IOError:
         print "File Not Found"
         sys_exit(1)
+    print "INSIDE File Handle"
+    DrawSystem()
+    return 0
 
-   
+
+def DrawSystem():
+    global SIZE, AXIOM,RULES,ANGLE,ITERATE
+    glClear( GL_COLOR_BUFFER_BIT )
+    L_System( SIZE,AXIOM, RULES,ANGLE).draw(ITERATE)
+    return 0
+
 
 def createMenu():
-    menu = glutCreateMenu(processMenuEvents)
+    submenu1 = glutCreateMenu(processMenuEvents)
     glutAddMenuEntry("Dragon",1)
     glutAddMenuEntry("Snowflake",2)
     glutAddMenuEntry("Sierpinsky",3)
     glutAddMenuEntry("Plant",4)
-    submenu = glutCreateMenu(colorChange)
+    submenu2 = glutCreateMenu(colorChange)
     glutAddMenuEntry("Red",4)
     glutAddMenuEntry("Orange",5)
+    submenu3 = glutCreateMenu(shapeChange)
+    glutAddMenuEntry("Line",1)
+    glutAddMenuEntry("Circle",2)
+    glutAddMenuEntry("Square",3)
     glutCreateMenu(processMenuEvents)
-    glutAddSubMenu("color",submenu)
-    glutAddSubMenu("System",menu)
-    glutAddMenuEntry("File",5)
-    glutAttachMenu (GLUT_RIGHT_BUTTON)
-    glutPostRedisplay()
+    glutAddSubMenu("color",submenu2)
+    glutAddSubMenu("System",submenu1)
+    glutAddSubMenu("Shapes",submenu3)
+    glutAddMenuEntry("Load File",5)
+    glutAttachMenu (GLUT_MIDDLE_BUTTON)
 
+def shapeChange(option):
+    global SHAPE
+    if option  == 1:
+        SHAPE = "line"
+        DrawSystem()
+    elif option == 2:
+        print "INSIDE shapeChange"
+        SHAPE = "circle"
+        DrawSystem()
+    elif option == 3:
+        SHAPE = "quad"
+        DrawSystem()
+    else:
+        print "INSIDE shapeChange else"
+        SHAPE = "line"
+        DrawSystem()
+    return 0
 def colorChange(option):
     global colorR, colorB, colorG
-    print type(option)
     if option == 4:
         colorR = 1.0
         colorB=0.0
         colorG=0.0
+        print "Colorchange"
+        DrawSystem()
     elif option == 5:
         colorR=0.9
         colorB=0.6
         colorG=0.5
+        print "Colorchange"
+        DrawSystem()
+    return 0
 
 def processMenuEvents(option):
     if option == 1:
@@ -198,6 +231,7 @@ def processMenuEvents(option):
         L_System(0.01,'FX', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, 25).draw(5)
     else:
         file_handle()
+    return 0
         
 
 if __name__=='__main__':
@@ -205,9 +239,10 @@ if __name__=='__main__':
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
     glutInitWindowSize(width, height)
     glutInitWindowPosition(100, 100)
-    glutCreateWindow("Simple OpenGL Examples")
+    glutCreateWindow("L-Systems Generator")
     createMenu()
     glutDisplayFunc(display)
+    file_handle()
     glutMainLoop()
 
 

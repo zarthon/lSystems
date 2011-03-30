@@ -3,6 +3,6 @@ Ax;FA
 Ru;FA:FB-FA-FB
 Ru;FB:FA+FB+FA
 An;60
-Si;0.001
+Si;0.01
 It;6
-Sh;quad
+Sh;circle
