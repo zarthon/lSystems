@@ -16,6 +16,7 @@ ANGLE=None
 VARIABLES = None
 SIZE=None
 ITERATE=None
+SHAPE=''
 
 def Lindenmayer(axiom,rules):
 
@@ -70,17 +71,35 @@ class L_System(GenerateList):
         super(L_System, self).__init__(Lindenmayer(start, rules))
     
 ##########################3
+    def drawShape(self,which):
+        if which == "line":
+            glBegin(GL_LINES)
+            glVertex2d(0,0)
+            glVertex2d(self.offset,0)
+            glEnd()
+        elif which == "quad":
+            glBegin(GL_POLYGON)
+            glVertex2d(0,0)
+            glVertex2d(self.offset,0)
+            glVertex2d(self.offset,self.offset)
+            glVertex2d(0,self.offset)
+            glEnd()
+        elif which=="circle":
+            glBegin(GL_LINE_LOOP)
+            for ang in range(0, 360, 2):
+                x = cos(ang*pi/180)
+                y = sin(ang*pi/180)
+                glVertex2d(x, y)
+            glEnd()
+        glFlush()
     def forward(self):
-        glBegin(GL_LINES)
-        glVertex2d(0,0)
-        glVertex2d(self.offset,0)
-        glEnd()
+        global SHAPE
+        self.drawShape(SHAPE)
         glTranslated(self.offset,0,0)
     def right(self): 
         glRotated(self.angle,0,0,1)
     def left(self):
         glRotated(-self.angle,0,0,1)
-######################################
     def go(self):
         glTranslated(self.offset,0,0)
     def save(self):
@@ -103,15 +122,16 @@ class L_System(GenerateList):
             if char in self.actions:
                 self.actions[char]()
 
+            
 
 def display():
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT )
+    glClear( GL_COLOR_BUFFER_BIT )
     glColor3d(1.0,0.0,0.0)
 
 
 def file_handle():
     try:
-        global AXIOM,RULES,ANGLE,SIZE,ITERATE
+        global AXIOM,RULES,ANGLE,SIZE,ITERATE,SHAPE
         fin = open(FILENAME,"r")
         lineList = fin.readlines()
         fin.close()
@@ -130,6 +150,9 @@ def file_handle():
                 SIZE = float(temp[1].rstrip())
             elif temp[0] == "It":
                 ITERATE = int(temp[1].rstrip())
+            elif temp[0] == "Sh":
+                SHAPE = temp[1].rstrip()
+        L_System( SIZE,AXIOM, RULES,ANGLE).draw(ITERATE)
     except IOError:
         print "File Not Found"
         sys_exit(1)
@@ -142,13 +165,13 @@ def createMenu():
     glutAddMenuEntry("Snowflake",2)
     glutAddMenuEntry("Sierpinsky",3)
     glutAddMenuEntry("Plant",4)
-    glutAddMenuEntry("File",5)
     submenu = glutCreateMenu(colorChange)
     glutAddMenuEntry("Red",4)
     glutAddMenuEntry("Orange",5)
     glutCreateMenu(processMenuEvents)
     glutAddSubMenu("color",submenu)
     glutAddSubMenu("System",menu)
+    glutAddMenuEntry("File",5)
     glutAttachMenu (GLUT_RIGHT_BUTTON)
     glutPostRedisplay()
 
@@ -166,7 +189,7 @@ def colorChange(option):
 
 def processMenuEvents(option):
     if option == 1:
-        L_System( SIZE,AXIOM, RULES,ANGLE).draw(ITERATE)
+        L_System( 0.01,'FX',{'X':'X+FY','Y':'FX-Y'},90).draw(10)
     elif option == 2:
         L_System(0.01,'F++F++F',{'F':'F-F++F-F'},60).draw(3)
     elif option == 3:
