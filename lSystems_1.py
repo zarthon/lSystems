@@ -9,14 +9,6 @@ colorR=1.0
 colorB=0.0
 colorG=0.0
 matrix = []
-FILENAME='lsystems.txt'
-AXIOM=None
-RULES={}
-ANGLE=None
-VARIABLES = None
-SIZE=None
-ITERATE=None
-
 def Lindenmayer(axiom,rules):
 
     rules = rules.items()
@@ -109,40 +101,12 @@ def display():
     glColor3d(1.0,0.0,0.0)
 
 
-def file_handle():
-    try:
-        global AXIOM,RULES,ANGLE,SIZE,ITERATE
-        fin = open(FILENAME,"r")
-        lineList = fin.readlines()
-        fin.close()
-        for line in lineList:
-            temp = line.split(";")
-            if temp[0] == "Va":
-                VARIABLES = temp[1].rstrip()
-            elif temp[0] == "Ax":
-                AXIOM = temp[1].rstrip()
-            elif temp[0] == "Ru":
-                key, val = temp[1].rstrip().split(":")[0],temp[1].rstrip().split(":")[1]
-                RULES[key] = val
-            elif temp[0] == "An":
-                ANGLE = int(temp[1].rstrip()) 
-            elif temp[0] == "Si":
-                SIZE = float(temp[1].rstrip())
-            elif temp[0] == "It":
-                ITERATE = int(temp[1].rstrip())
-    except IOError:
-        print "File Not Found"
-        sys_exit(1)
-
-   
-
 def createMenu():
     menu = glutCreateMenu(processMenuEvents)
     glutAddMenuEntry("Dragon",1)
     glutAddMenuEntry("Snowflake",2)
     glutAddMenuEntry("Sierpinsky",3)
     glutAddMenuEntry("Plant",4)
-    glutAddMenuEntry("File",5)
     submenu = glutCreateMenu(colorChange)
     glutAddMenuEntry("Red",4)
     glutAddMenuEntry("Orange",5)
@@ -166,15 +130,13 @@ def colorChange(option):
 
 def processMenuEvents(option):
     if option == 1:
-        L_System( SIZE,AXIOM, RULES,ANGLE).draw(ITERATE)
+        L_System( 0.01,'FX', {'X': 'X+YF', 'Y': 'FX-Y'}, 90).draw(10)
     elif option == 2:
         L_System(0.01,'F++F++F',{'F':'F-F++F-F'},60).draw(3)
     elif option == 3:
         L_System(0.001,'FA', {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}, 60).draw(8)
-    elif option==4:
-        L_System(0.01,'FX', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, 25).draw(5)
     else:
-        file_handle()
+        L_System(0.01,'FX', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, 25).draw(5)
         
 
 if __name__=='__main__':
