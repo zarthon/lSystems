@@ -17,7 +17,8 @@ VARIABLES = None
 SIZE=None
 ITERATE=None
 SHAPE=''
-TOGGLE=False
+
+
 def Lindenmayer(axiom,rules):
 
     rules = rules.items()
@@ -126,8 +127,7 @@ class L_System(GenerateList):
             
 
 def display():
-    glClear( GL_COLOR_BUFFER_BIT )
-    glColor3d(1.0,0.0,0.0)
+    initialize()
 
 def file_handle():
     try:
@@ -159,6 +159,10 @@ def file_handle():
     DrawSystem()
     return 0
 
+def onResize(w,h):
+    global width,height
+    width,height = (w,h)
+    glViewport(0,0,w,h)
 
 def DrawSystem():
     global SIZE, AXIOM,RULES,ANGLE,ITERATE
@@ -234,14 +238,26 @@ def processMenuEvents(option):
     return 0
         
 
+def initialize():
+    glColor3d(1.0,0.0,0.0)
+    glClear (GL_COLOR_BUFFER_BIT)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    gluOrtho2D(0,1,0,1)
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+
+
 if __name__=='__main__':
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
     glutInitWindowSize(width, height)
     glutInitWindowPosition(100, 100)
     glutCreateWindow("L-Systems Generator")
+    glutReshapeFunc(onResize)
     createMenu()
     glutDisplayFunc(display)
+    initialize()
     file_handle()
     glutMainLoop()
 
