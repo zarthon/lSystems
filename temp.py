@@ -18,6 +18,13 @@ SIZE=None
 ITERATE=None
 SHAPE=''
 
+class Coord:
+    def __init__(self,l=0,r=0,b=0,t=0):
+        self.l = l
+        self.r = r
+        self.t = t
+        self.b = b
+world_coord = Coord(-1,1,-0.5,1.5)
 
 def Lindenmayer(axiom,rules):
 
@@ -77,7 +84,7 @@ class L_System(GenerateList):
         if which == "line":
             glBegin(GL_LINES)
             glVertex2d(0,0)
-            glVertex2d(self.offset,0)
+            glVertex2d(0,self.offset)
             glEnd()
         elif which == "quad":
             glBegin(GL_POLYGON)
@@ -97,13 +104,13 @@ class L_System(GenerateList):
     def forward(self):
         global SHAPE
         self.drawShape(SHAPE)
-        glTranslated(self.offset,0,0)
+        glTranslated(0,self.offset,0)
     def right(self): 
         glRotated(self.angle,0,0,1)
     def left(self):
         glRotated(-self.angle,0,0,1)
     def go(self):
-        glTranslated(self.offset,0,0)
+        glTranslated(0,self.offset,0)
     def save(self):
         global matrix
         temp = glGetFloatv(GL_MODELVIEW_MATRIX)
@@ -128,6 +135,7 @@ class L_System(GenerateList):
 
 def display():
     initialize()
+    
 
 def file_handle():
     try:
@@ -160,9 +168,17 @@ def file_handle():
     return 0
 
 def onResize(w,h):
-    global width,height
+    global width,height,world_coord
     width,height = (w,h)
     glViewport(0,0,w,h)
+    cx = 0.5*(world_coord.l + world_coord.r )
+    dy = world_coord.t - world_coord.b
+    world_coord.l = cx - 0.5*dy * w/h
+    world_coord.r = cx + 0.5*dy * w/h
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    gluPerspective(40.0,w/h,0.5,20.0)
+    glMatrixMode(GL_MODELVIEW)
 
 def DrawSystem():
     global SIZE, AXIOM,RULES,ANGLE,ITERATE
@@ -230,7 +246,7 @@ def processMenuEvents(option):
     elif option == 2:
         L_System(0.01,'F++F++F',{'F':'F-F++F-F'},60).draw(3)
     elif option == 3:
-        L_System(0.001,'FA', {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}, 60).draw(8)
+        L_System(0.01,'FA', {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}, 60).draw(8)
     elif option==4:
         L_System(0.01,'FX', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, 25).draw(5)
     else:
@@ -239,18 +255,19 @@ def processMenuEvents(option):
         
 
 def initialize():
+    global world_coord
     glColor3d(1.0,0.0,0.0)
     glClear (GL_COLOR_BUFFER_BIT)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluOrtho2D(0,1,0,1)
+    gluOrtho2D(world_coord.l,world_coord.r,world_coord.b,world_coord.t)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
 
 
 if __name__=='__main__':
     glutInit(sys.argv)
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
+    glutInitDisplayMode(GLUT_DEPTH | GLUT_RGB)
     glutInitWindowSize(width, height)
     glutInitWindowPosition(100, 100)
     glutCreateWindow("L-Systems Generator")
