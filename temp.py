@@ -18,7 +18,7 @@ SIZE=None
 ITERATE=None
 SHAPE=''
 TREE=False
-inde=None
+TD=0
 class Coord:
     def __init__(self,l=0,r=0,b=0,t=0):
         self.l = l
@@ -136,17 +136,19 @@ class L_System(GenerateList):
         pass
 
     def draw(self, index):
+        global TD
         glColor3d(colorR,colorB,colorG)
         glLineWidth(1)
         glLoadIdentity()
         glPushMatrix()
-	glRotated(-45, 0,1,0)
+        glRotated(TD, 0,1,0)
         print self[index]
         for char in self[index]:
             if char in self.actions:
                 self.actions[char]()
 
         glFlush()
+        glPopMatrix()
             
 
 def display():
@@ -259,23 +261,45 @@ def colorChange(option):
     return 0
 
 def processMenuEvents(option):
-    global TREE
+    global SIZE,AXIOM,RULES,ANGLE,ITERATE,TREE 
     if option == 1:
         TREE = False
         L_System( 0.01,'FX',{'X':'X+FY','Y':'FX-Y'},90).draw(10)
+        SIZE = 0.01
+        AXIOM = 'FX'
+        RULES = {'X':'X+FY','Y':'FX-Y'}
+        ANGLE = 90
+        ITERATE = 10
     elif option == 2:
         TREE = False
         L_System(0.01,'F++F++F',{'F':'F-F++F-F'},60).draw(3)
+        SIZE = 0.01
+        AXIOM = 'F++F++F'
+        RULES = {'F':'F-F++F-F'}
+        ANGLE = 60
+        ITERATE = 3
+
     elif option == 3:
         TREE = False
         L_System(0.01,'FA', {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}, 60).draw(8)
     elif option==4:
+        print "option 4"
         TREE = True
         L_System(0.007,'FX', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, 25).draw(6)
+        SIZE = 0.007
+        AXIOM = 'FX'
+        RULES = {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}
+        ANGLE = 25
+        ITERATE = 6
+
     else:
         file_handle()
     return 0
         
+def keyboard(key,x,y):
+    global TD
+    TD = (TD + 15)%360
+    DrawSystem()
 
 def initialize():
     global world_coord
@@ -297,6 +321,7 @@ if __name__=='__main__':
     glutReshapeFunc(onResize)
     createMenu()
     glutDisplayFunc(display)
+    glutKeyboardFunc(keyboard)
     initialize()
     file_handle()
     glutMainLoop()
