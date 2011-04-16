@@ -17,14 +17,15 @@ VARIABLES = None
 SIZE=None
 ITERATE=None
 SHAPE=''
-
+TREE=False
+inde=None
 class Coord:
     def __init__(self,l=0,r=0,b=0,t=0):
         self.l = l
         self.r = r
         self.t = t
         self.b = b
-world_coord = Coord(-1,1,-0.5,1.5)
+world_coord = Coord(-1,1,0,2)
 
 def Lindenmayer(axiom,rules):
 
@@ -81,36 +82,48 @@ class L_System(GenerateList):
 ##########################3
     def drawShape(self,which):
         global SIZE
-        if which == "line":
+        if which == "line" and TREE == True:
             glBegin(GL_LINES)
-            glVertex2d(0,0)
-            glVertex2d(0,self.offset)
+            glVertex3d(0,0,0)
+            glVertex3d(0,self.offset,self.offset)
             glEnd()
-        elif which == "quad":
+        elif which == "quad" :
             glBegin(GL_POLYGON)
             glVertex2d(0,0)
             glVertex2d(self.offset,0)
             glVertex2d(self.offset,self.offset)
             glVertex2d(0,self.offset)
             glEnd()
-        elif which=="circle":
+        elif which=="circle" :
             glBegin(GL_LINE_LOOP)
             for ang in range(0, 360, 5):
                 x = cos(ang*pi/180)*SIZE
                 y = sin(ang*pi/180)*SIZE
                 glVertex2d(x, y)
             glEnd()
-        glFlush()
+        elif which == "line" and TREE == False:
+            glBegin(GL_LINES)
+            glVertex3d(0,0,0)
+            glVertex3d(self.offset,0,self.offset)
+            glEnd()
+        
+#        glFlush()
     def forward(self):
         global SHAPE
         self.drawShape(SHAPE)
-        glTranslated(0,self.offset,0)
+        if TREE==True:
+            glTranslated(0,self.offset,0)
+        else:
+            glTranslated(self.offset,0,0)
     def right(self): 
         glRotated(self.angle,0,0,1)
     def left(self):
         glRotated(-self.angle,0,0,1)
     def go(self):
-        glTranslated(0,self.offset,0)
+        if TREE==True:
+            glTranslated(0,self.offset,0)
+        else:
+            glTranslated(self.offset,0,0)
     def save(self):
         global matrix
         temp = glGetFloatv(GL_MODELVIEW_MATRIX)
@@ -127,14 +140,19 @@ class L_System(GenerateList):
         glLineWidth(1)
         glLoadIdentity()
         glPushMatrix()
+        print self[index]
         for char in self[index]:
             if char in self.actions:
                 self.actions[char]()
 
+        glFlush()
             
 
 def display():
+    print "inside display"
     initialize()
+    glLoadIdentity()
+    gluLookAt(0.0,0.0,5.0,0.0,0.0,0.0,0.0,1.0,0.0)
     
 
 def file_handle():
@@ -163,7 +181,6 @@ def file_handle():
     except IOError:
         print "File Not Found"
         sys_exit(1)
-    print "INSIDE File Handle"
     DrawSystem()
     return 0
 
@@ -241,14 +258,19 @@ def colorChange(option):
     return 0
 
 def processMenuEvents(option):
+    global TREE
     if option == 1:
+        TREE = False
         L_System( 0.01,'FX',{'X':'X+FY','Y':'FX-Y'},90).draw(10)
     elif option == 2:
+        TREE = False
         L_System(0.01,'F++F++F',{'F':'F-F++F-F'},60).draw(3)
     elif option == 3:
+        TREE = False
         L_System(0.01,'FA', {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}, 60).draw(8)
     elif option==4:
-        L_System(0.01,'FX', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, 25).draw(5)
+        TREE = True
+        L_System(0.007,'FX', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, 25).draw(6)
     else:
         file_handle()
     return 0
