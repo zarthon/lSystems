@@ -19,7 +19,7 @@ SIZE=None
 ITERATE=None
 SHAPE=''
 TREE=False
-inde=None
+TD=0
 
 class Coord:
 	def __init__(self,l=0,r=0,b=0,t=0):
@@ -43,7 +43,7 @@ def Lindenmayer(axiom,rules):
 		axiom = reduce(apply_rule,rules,axiom).upper()
 
 class GenerateList(object):
-	*def __init__(self,generator):
+	def __init__(self,generator):
 		self.__generator = generator
 		self.__list = []
 
@@ -51,7 +51,7 @@ class GenerateList(object):
 	def __getitem__(self,index):
 		for i in range(index-len(self.__list) +1):
 			self.__list.append(self.__generator.next())
-			return self.__list[index]
+		return self.__list[index]
 
 class L_System(GenerateList):
 	"""
@@ -146,10 +146,17 @@ class L_System(GenerateList):
 		glLoadMatrixd(temp)
 	
 	def pitchDown(self): glRotated(self.angle, 1,0,0)
+
+	def pitchUp (self): glRotated(-self.angle, 1,0,0)
+
+	def rollLeft (self): glRotated (self.angle, 0,1,0)
+	
+	def rollRight (self): glRotated (-self.angle, 0,1,0)
 	
 	def update(self): pass
 
 	def draw(self, index):
+		global TD
 		glColor3d(colorR,colorB,colorG)
 		glLineWidth(1)
 		glLoadIdentity()
@@ -271,19 +278,34 @@ def colorChange(option):
 	return 0
 
 def processMenuEvents(option):
-	global TREE
+	global SIZE,AXIOM,RULES,ANGLE,ITERATE,TREE
 	if option == 1:
 		TREE = False
 		L_System( 0.01,'FX',{'X':'X+FY','Y':'FX-Y'},90).draw(10)
+		SIZE = 0.01
+		AXIOM = 'FX'
+		RULES = {'X':'X+FY','Y':'FX-Y'}
+		ANGLE = 90
+		ITERATE = 10
 	elif option == 2:
 		TREE = False
 		L_System(0.01,'F++F++F',{'F':'F-F++F-F'},60).draw(3)
+		SIZE = 0.01
+		AXIOM = 'F++F++F'
+		RULES = {'F':'F-F++F-F'}
+		ANGLE = 60
+		ITERATE = 3
 	elif option == 3:
 		TREE = False
 		L_System(0.01,'FA', {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}, 60).draw(8)
 	elif option==4:
 		TREE = True
 		L_System(0.007,'FX', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, 25).draw(6)
+		SIZE = 0.007
+		AXIOM = 'FX'
+		RULES = {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}
+		ANGLE = 25
+		ITERATE = 6
 	else:
 		file_handle()
 	return 0
@@ -312,6 +334,7 @@ if __name__=='__main__':
 	glutReshapeFunc(onResize)
 	createMenu()
 	glutDisplayFunc(display)
+	glutKeyboardFunc(keyboard)
 	initialize()
 	file_handle()
 	glutMainLoop()

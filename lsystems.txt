@@ -1,8 +1,8 @@
 Va;FAB
 Ax;FA
-Ru;FA:FB-FA-FB
-Ru;FB:FA+FB+FA
+Ru;FA:F&B-FA-FB
+Ru;FB:FA+F^B+FA
 An;60
-Si;0.01
+Si;0.1
 It;6
 Sh;circle
