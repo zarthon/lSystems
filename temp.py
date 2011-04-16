@@ -140,6 +140,7 @@ class L_System(GenerateList):
         glLineWidth(1)
         glLoadIdentity()
         glPushMatrix()
+	glRotated(-45, 0,1,0)
         print self[index]
         for char in self[index]:
             if char in self.actions:
@@ -299,5 +300,4 @@ if __name__=='__main__':
     initialize()
     file_handle()
     glutMainLoop()
-
 
