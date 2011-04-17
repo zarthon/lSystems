@@ -26,6 +26,7 @@ ITERATE=None
 SHAPE=''
 TREE=False
 TD=0
+XZ=5
 
 #Class encapsulation of world coordinates
 class Coord:
@@ -171,6 +172,10 @@ class L_System(GenerateList):
             glVertex3d(0,0,0)
             glVertex3d(self.offset,0,0)
             glEnd()
+	elif which=="cylinder":
+		quadratic=gluNewQuadric()
+		gluQuadricNormals(quadratic, GLU_SMOOTH)
+		gluCylinder(quadratic,self.offset,self.offset,self.offset*3,32,32)	
 #Move forward
     def forward(self):
 		global SHAPE
@@ -307,6 +312,7 @@ def createMenu():
 	glutAddMenuEntry("Line",1)
 	glutAddMenuEntry("Circle",2)
 	glutAddMenuEntry("Square",3)
+	glutAddMenuEntry("Cylinder",4)
 	glutCreateMenu(processMenuEvents)
 	glutAddSubMenu("color",submenu2)
 	glutAddSubMenu("System",submenu1)
@@ -323,6 +329,8 @@ def shapeChange(option):
 		SHAPE = "circle"
 	elif option == 3:
 		SHAPE = "quad"
+	elif option==4:
+		SHAPE="cylinder"
 	else:
 		print "INSIDE shapeChange else"
 		SHAPE = "line"
@@ -379,13 +387,13 @@ def processMenuEvents(option):
         ITERATE = 8
     elif option==4:
         TREE = True
-        L_System(0.007,'FX', {'X': 'F-[[X]+X]^F[+FX]-X', 'F': 'FF'}, 25).draw(4)
+        L_System(0.007,'FX', {'X': 'F&[[X]+X]^F[+FX]-X', 'F': 'FF'}, 25).draw(4)
 
         SIZE = 0.007
         XS = SIZE
         YS = SIZE
         AXIOM = 'FX'
-        RULES = {'X': 'F-[[X]+X]^F[+FX]-X', 'F': 'FF'}
+        RULES = {'X': 'F&[[X]+X]^F[+FX]-X', 'F': 'FF'}
         ANGLE = 25
         ITERATE = 4
     else:
@@ -406,7 +414,7 @@ def keyboard_spe(key,x,y):
     DrawSystem()
 
 def keyboard(key,x,y):
-    global TD,SIZE
+    global TD,SIZE,XZ
     if key == chr(27):
         sys.exit(0)
     if key == 'r': 
@@ -414,11 +422,12 @@ def keyboard(key,x,y):
     if key == 'R':
         TD = (TD - 15)%360   
         TD = -(360-TD)
-        print TD
+        #print TD
     if key == 'z':
         SIZE = SIZE + (SIZE*0.05)
     if key == 'Z':
         SIZE = SIZE - (SIZE*0.05)
+    DrawSystem()
     
 def initialize():
     global world_coord

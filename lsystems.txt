@@ -4,4 +4,4 @@ Ru;F:F[+F]F[-F]
 An;60
 Si;0.1
 It;2
-Sh;line
+Sh;cylinder
