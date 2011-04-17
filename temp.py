@@ -4,14 +4,17 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import random
+
 #Important windo parameters
 width = 800
 height = 800
+
 #Global Parameters declared
 colorR=1.0
 colorB=0.0
 colorG=0.0
 matrix = []
+
 #Parameters to draw the L-System is declared
 FILENAME='lsystems.txt'
 AXIOM=None
@@ -34,6 +37,8 @@ class Coord:
 
 world_coord = Coord(-1,2,-0.5,2)
 XS = SIZE
+YS = SIZE
+
 #Function to apply an iteration i.e apply rules to the axiom passed to the function
 def Lindenmayer(axiom,rules):
 	rules = rules.items()
@@ -209,16 +214,17 @@ class L_System(GenerateList):
     
 #Draw the LSystem with iter = index
     def draw(self, index):
-        global TD,XS
+        global TD,XS,YS
         glColor3d(colorR,colorB,colorG)
         glLineWidth(1)
         glLoadIdentity()
         glPushMatrix()
         glTranslatef(XS,0,0)
+        glTranslatef(0,YS,0)
         glRotated(TD, 0,1,0)
         print TD
         print SIZE
-        print self[index]
+        #print self[index]
         for char in self[index]:
             if char in self.actions:
                 self.actions[char]()
@@ -236,7 +242,7 @@ def display():
 
 def file_handle():
     try:
-        global AXIOM,RULES,ANGLE,SIZE,ITERATE,SHAPE,XS,TREE
+        global AXIOM,RULES,ANGLE,SIZE,ITERATE,SHAPE,XS,TREE,YS
         fin = open(FILENAME,"r")
         lineList = fin.readlines()
         fin.close()
@@ -255,6 +261,7 @@ def file_handle():
             elif temp[0] == "Si":
                 SIZE = float(temp[1].rstrip())
                 XS = SIZE
+                YS = SIZE
             elif temp[0] == "It":
                 ITERATE = int(temp[1].rstrip())
             elif temp[0] == "Sh":
@@ -339,12 +346,13 @@ def colorChange(option):
 	return 0
 
 def processMenuEvents(option):
-    global SIZE,AXIOM,RULES,ANGLE,ITERATE,TREE,XS
+    global SIZE,AXIOM,RULES,ANGLE,ITERATE,TREE,XS,YS
     if option == 1:
         TREE = False
         L_System( 0.01,'FX',{'X':'X+FY','Y':'FX-Y'},90).draw(10)
         SIZE  = 0.01
         XS = SIZE
+        YS = SIZE
         AXIOM = 'FX'
         RULES = {'X':'X+FY','Y':'FX-Y'}
         ANGLE = 90
@@ -354,6 +362,7 @@ def processMenuEvents(option):
         L_System(0.01,'F++F++F',{'F':'F-F++F-F'},60).draw(3)
         SIZE = 0.01
         XS = SIZE
+        YS = SIZE
         AXIOM = 'F++F++F'
         RULES = {'F':'F-F++F-F'}
         ANGLE = 60
@@ -363,6 +372,7 @@ def processMenuEvents(option):
         L_System(0.01,'FA', {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}, 60).draw(4)
         SIZE = 0.01
         XS = SIZE
+        YS = SIZE
         AXIOM = 'FA'
         RULES = {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}
         ANGLE = 60
@@ -373,6 +383,7 @@ def processMenuEvents(option):
 
         SIZE = 0.007
         XS = SIZE
+        YS = SIZE
         AXIOM = 'FX'
         RULES = {'X': 'F-[[X]+X]^F[+FX]-X', 'F': 'FF'}
         ANGLE = 25
@@ -381,8 +392,21 @@ def processMenuEvents(option):
         file_handle()
     return 0
 
+def keyboard_spe(key,x,y):
+    global XS,YS
+    if key == GLUT_KEY_RIGHT:
+        XS = XS  + (0.05)
+    if key == GLUT_KEY_LEFT:
+        XS = XS - (0.05)
+    if key == GLUT_KEY_UP:
+        YS = YS + (0.05)
+    if key == GLUT_KEY_DOWN:
+        YS = YS - (0.05)
+
+    DrawSystem()
+
 def keyboard(key,x,y):
-    global TD,SIZE,XS
+    global TD,SIZE
     if key == chr(27):
         sys.exit(0)
     if key == 'r': 
@@ -395,13 +419,7 @@ def keyboard(key,x,y):
         SIZE = SIZE + (SIZE*0.05)
     if key == 'Z':
         SIZE = SIZE - (SIZE*0.05)
-    if key == 's':
-        XS = XS  + (0.05)
-    if key == 'S':
-        XS = XS - (0.05)
-
-    DrawSystem()
-
+    
 def initialize():
     global world_coord
     glColor3d(1.0,0.0,0.0)
@@ -430,6 +448,7 @@ if __name__=='__main__':
 	createMenu()
 	glutDisplayFunc(display)
 	glutKeyboardFunc(keyboard)
+	glutSpecialFunc(keyboard_spe)
 	file_handle()
 	glutMainLoop()
 
