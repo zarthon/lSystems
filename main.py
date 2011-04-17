@@ -526,7 +526,7 @@ if __name__=='__main__':
     glutDisplayFunc(display)
     glutKeyboardFunc(keyboard)
     glutSpecialFunc(keyboard_spe)
-    glutMouseFunc(motion)
+    #glutMouseFunc(motion)
     print "Hit ESC to exit"
     print "Shortcuts: "
     print " X or x for Rotation around X axis in clockwise and anticlockwise"
