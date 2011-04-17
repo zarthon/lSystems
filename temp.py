@@ -113,7 +113,7 @@ class L_System(GenerateList):
             glVertex3d(0,0,0)
             glVertex3d(0,self.offset,0)
             glEnd()
-        elif which == "quad" :
+        elif which == "cube" :
 
             glBegin(GL_QUADS);			# Start Drawing The Cube
             glColor3f(0.0,1.0,0.0);			# Set The Color To Blue
@@ -228,7 +228,6 @@ class L_System(GenerateList):
         glLineWidth(1)
         glLoadIdentity()
         glPushMatrix()
-        print XS,YS,TD
         glTranslatef(XS,0,0)
         glTranslatef(0,YS,0)
         glRotated(TD, 0,1,0)
@@ -241,7 +240,6 @@ class L_System(GenerateList):
 
 #Main Display CallBack Function
 def display():
-    print "inside display"
     initialize()
     glLoadIdentity()
     glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
@@ -256,7 +254,6 @@ def file_handle():
         fin.close()
 
     	VERT=True
-        print "Inside File Handle"
         for line in lineList:
             temp = line.split(";")
             if temp[0] == "Va":
@@ -279,7 +276,6 @@ def file_handle():
     except IOError:
         print "File Not Found"
         sys_exit(1)
-    print XS, YS
     DrawSystem()
     return 0
 
@@ -308,7 +304,6 @@ def DrawSystem():
 
 #RightClick Menu
 def createMenu():
-    print "inside create menu"
     submenu1 = glutCreateMenu(processMenuEvents)
     glutAddMenuEntry("Dragon",1)
     glutAddMenuEntry("Snowflake",2)
@@ -322,6 +317,7 @@ def createMenu():
     glutAddMenuEntry("Circle",2)
     glutAddMenuEntry("Square",3)
     glutAddMenuEntry("Cylinder",4)
+    glutAddMenuEntry("Cube",5)
     submenu4 = glutCreateMenu(orientChange)
     glutAddMenuEntry("Horizontal",1)
     glutAddMenuEntry("Vertical",2)
@@ -347,19 +343,21 @@ def orientChange(option):
 
 #Shape Change Menu Function
 def shapeChange(option):
-	global SHAPE
-	if option  == 1:
-		SHAPE = "line"
-	elif option == 2:
-		SHAPE = "circle"
-	elif option == 3:
-		SHAPE = "square"
-	elif option==4:
-		SHAPE="cylinder"
-	else:
-		SHAPE = "line"
-	DrawSystem()
-	return 0
+    global SHAPE
+    if option  == 1:
+        SHAPE = "line"
+    elif option == 2:
+        SHAPE = "circle"
+    elif option == 3:
+        SHAPE = "square"
+    elif option==4:
+        SHAPE="cylinder"
+    elif option == 5:
+        SHAPE ="cube"
+    else:
+        SHAPE = "line"
+    DrawSystem()
+    return 0
 
 #Global ColorChange function
 def colorChange(option):
@@ -451,7 +449,6 @@ def keyboard(key,x,y):
     if key == 'R':
         TD = (TD - 15)%360   
         TD = -(360-TD)
-        #print TD
     if key == 'z':
         SIZE = SIZE + (SIZE*0.05)
     if key == 'Z':

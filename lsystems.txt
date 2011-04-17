@@ -1,7 +1,8 @@
-Va;F
-Ax;F
-Ru;F:F[+F]F[-F]
-An;60
-Si;0.1
-It;2
+Va;XF
+Ax;X
+Ru;X:F-[[X]+X]+F[+FX]-X
+Ru;F:FF
+An;25
+Si;0.01
+It;4
 Sh;line
