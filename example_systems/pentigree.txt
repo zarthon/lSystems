@@ -1,0 +1,7 @@
+Va;F
+Ax;F-F-F-F-F
+Ru;F:F-F++F+F-F-F
+Sh;line
+Si;0.01
+An;72
+It;3

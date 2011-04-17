@@ -1,0 +1,8 @@
+Va;F
+Ax;F+F+F+F
+Ru;F:F+G-FF+F+FF+FG+FF-G+FF-F-FF-FG-FFF
+Ru;G:GGGGGG
+Sh;line
+Si;0.01
+An;90
+It;2

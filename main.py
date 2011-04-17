@@ -16,7 +16,11 @@ colorG=0.0
 matrix = []
 
 #Parameters to draw the L-System is declared
-FILENAME='lsystems.txt'
+try:
+	FILENAME=sys.argv[1]
+except IndexError:
+	print 'No config file supplied. Select a system from right-click menu.'
+	FILENAME=''
 AXIOM=None
 RULES={}
 ANGLE=None
@@ -277,10 +281,9 @@ def file_handle():
                 ITERATE = int(temp[1].rstrip())
             elif temp[0] == "Sh":
                 SHAPE = temp[1].rstrip()
+	DrawSystem()
     except IOError:
         print "File Not Found"
-        sys_exit(1)
-    DrawSystem()
     return 0
 
 #Call Back function for reshape
@@ -507,6 +510,10 @@ def initialize():
     glLoadIdentity()
     #gluLookAt(0.0,0.0,8.0,0.0,0.0,0.0,0.0,1.0,0.0)
 
+def motion(button, state, x, y):
+	if state==GLUT_DOWN:
+		print x,y
+
 if __name__=='__main__':
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_DEPTH | GLUT_RGB)
@@ -519,6 +526,7 @@ if __name__=='__main__':
     glutDisplayFunc(display)
     glutKeyboardFunc(keyboard)
     glutSpecialFunc(keyboard_spe)
+    glutMouseFunc(motion)
     print "Hit ESC to exit"
     print "Shortcuts: "
     print " X or x for Rotation around X axis in clockwise and anticlockwise"
@@ -526,5 +534,10 @@ if __name__=='__main__':
     print " z or Z for Zooming In and Zooming Out"
     print " Arrow Keys for moving the system "
     file_handle()
+    glColor3f(1.0,0.5,0.0)
+    glBegin(GL_LINES)
+    glVertex3d(2,0,0)
+    glVertex3d(2,10,0)
+    glEnd()
     glutMainLoop()
 

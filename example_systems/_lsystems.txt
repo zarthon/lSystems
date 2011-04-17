@@ -1,0 +1,8 @@
+Va;FXY
+Ax;X
+Ru;X:XFYFX+F+YFXFY-F-XFYFX
+Ru;Y:YFXFY-F-XFYFX+F+YFXFY
+Sh;line
+Si;0.01
+An;90
+It;2
