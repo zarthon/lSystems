@@ -1,0 +1,27 @@
+--- is a simple L-System Generator written in Python using PyOpenGL
+It was made by Mohit Kothari(mohitrajkothari@gmail.com) and Viranch Mehta(viranch.mehta@gmail.com) for a 3rd Computer
+Graphics course.
+
+This was our fist hand try on OpenGL.
+
+Requirements:
+=============
+-Python >2.5
+-PyOpenGL (GLU, GLUT, GLE)
+-numpy
+
+You can start by running (MAIN) file, on first run it will automatically read from "lsystems.txt" file and create the
+L-System. The Syntax for file is as follows:-
+
+Va;<list of all variables without seperation>
+Ax;<Axiom of the System>
+Ru;<Rule of system> 
+####For each rule there one line is there#####
+####Rule is defined as <variable>:<replacement>####
+An;<Angle>
+Si;<size> ###between 0 and 1####
+It;<iteration> ###number of iterations to be performed####
+Sh;<shape>###choose from the list [quad,line,circle]####
+
+There is also menu available which gives you several options, menu can be opened by right click
+

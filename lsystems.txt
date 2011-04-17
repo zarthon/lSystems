@@ -1,8 +1,7 @@
-Va;FAB
-Ax;FA
-Ru;FA:F&B-FA-FB
-Ru;FB:FA+F^B+FA
+Va;F
+Ax;F
+Ru;F:F[+F]F[-F]F
 An;60
 Si;0.1
-It;6
-Sh;quad
+It;2
+Sh;line
