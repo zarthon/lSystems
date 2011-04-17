@@ -102,19 +102,58 @@ class L_System(GenerateList):
 #Draw different shapes
     def drawShape(self,which):
         global SIZE,colorR, colorB, colorG
-        glColor3d(random.random(),random.random(),random.random())
+        #glColor3d(random.random(),random.random(),random.random())
         if which == "line" and TREE == True:
             glBegin(GL_LINES)
             glVertex3d(0,0,0)
             glVertex3d(0,self.offset,0)
             glEnd()
         elif which == "quad" :
-            glBegin(GL_POLYGON)
-            glVertex2d(0,0)
-            glVertex2d(self.offset,0)
-            glVertex2d(self.offset,self.offset)
-            glVertex2d(0,self.offset)
-            glEnd()
+		glBegin(GL_QUADS);			# Start Drawing The Cube
+
+
+		glColor3f(0.0,1.0,0.0);			# Set The Color To Blue
+		glVertex3f( self.offset, self.offset,-self.offset);		# Top Right Of The Quad (Top)
+		glVertex3f(-self.offset, self.offset,-self.offset);		# Top Left Of The Quad (Top)
+		glVertex3f(-self.offset, self.offset, self.offset);		# Bottom Left Of The Quad (Top)
+		glVertex3f( self.offset, self.offset, self.offset);		# Bottom Right Of The Quad (Top)
+
+		glColor3f(1.0,0.5,0.0);			# Set The Color To Orange
+		glVertex3f( self.offset,-self.offset, self.offset);		# Top Right Of The Quad (Bottom)
+		glVertex3f(-self.offset,-self.offset, self.offset);		# Top Left Of The Quad (Bottom)
+		glVertex3f(-self.offset,-self.offset,-self.offset);		# Bottom Left Of The Quad (Bottom)
+		glVertex3f( self.offset,-self.offset,-self.offset);		# Bottom Right Of The Quad (Bottom)
+
+		glColor3f(1.0,0.0,0.0);			# Set The Color To Red
+		glVertex3f( self.offset, self.offset, self.offset);		# Top Right Of The Quad (Front)
+		glVertex3f(-self.offset, self.offset, self.offset);		# Top Left Of The Quad (Front)
+		glVertex3f(-self.offset,-self.offset, self.offset);		# Bottom Left Of The Quad (Front)
+		glVertex3f( self.offset,-self.offset, self.offset);		# Bottom Right Of The Quad (Front)
+
+		glColor3f(1.0,1.0,0.0);			# Set The Color To Yellow
+		glVertex3f( self.offset,-self.offset,-self.offset);		# Bottom Left Of The Quad (Back)
+		glVertex3f(-self.offset,-self.offset,-self.offset);		# Bottom Right Of The Quad (Back)
+		glVertex3f(-self.offset, self.offset,-self.offset);		# Top Right Of The Quad (Back)
+		glVertex3f( self.offset, self.offset,-self.offset);		# Top Left Of The Quad (Back)
+
+		glColor3f(0.0,0.0,1.0);			# Set The Color To Blue
+		glVertex3f(-self.offset, self.offset, self.offset);		# Top Right Of The Quad (Left)
+		glVertex3f(-self.offset, self.offset,-self.offset);		# Top Left Of The Quad (Left)
+		glVertex3f(-self.offset,-self.offset,-self.offset);		# Bottom Left Of The Quad (Left)
+		glVertex3f(-self.offset,-self.offset, self.offset);		# Bottom Right Of The Quad (Left)
+
+		glColor3f(1.0,0.0,1.0);			# Set The Color To Violet
+		glVertex3f( self.offset, self.offset,-self.offset);		# Top Right Of The Quad (Right)
+		glVertex3f( self.offset, self.offset, self.offset);		# Top Left Of The Quad (Right)
+		glVertex3f( self.offset,-self.offset, self.offset);		# Bottom Left Of The Quad (Right)
+		glVertex3f( self.offset,-self.offset,-self.offset);		# Bottom Right Of The Quad (Right)
+		glEnd();				# Done Drawing The Quad
+            #glBegin(GL_POLYGON)
+            #glVertex2d(0,0)
+            #glVertex2d(self.offset,0)
+            #glVertex2d(self.offset,self.offset)
+            #glVertex2d(0,self.offset)
+            #glEnd()
         elif which=="circle" :
             glBegin(GL_LINE_LOOP)
             for ang in range(0, 360, 5):
@@ -179,11 +218,11 @@ class L_System(GenerateList):
         glRotated(TD, 0,1,0)
         print TD
         print SIZE
-        #print self[index]
+        print self[index]
         for char in self[index]:
             if char in self.actions:
                 self.actions[char]()
-        glFlush()
+	glFlush()
         glPopMatrix()
 
 
@@ -197,10 +236,11 @@ def display():
 
 def file_handle():
     try:
-        global AXIOM,RULES,ANGLE,SIZE,ITERATE,SHAPE,XS
+        global AXIOM,RULES,ANGLE,SIZE,ITERATE,SHAPE,XS,TREE
         fin = open(FILENAME,"r")
         lineList = fin.readlines()
         fin.close()
+	TREE=True
         for line in lineList:
             temp = line.split(";")
             if temp[0] == "Va":
@@ -320,7 +360,7 @@ def processMenuEvents(option):
         ITERATE = 3
     elif option == 3:
         TREE = False
-        L_System(0.01,'FA', {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}, 60).draw(8)
+        L_System(0.01,'FA', {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}, 60).draw(4)
         SIZE = 0.01
         XS = SIZE
         AXIOM = 'FA'
@@ -329,12 +369,12 @@ def processMenuEvents(option):
         ITERATE = 8
     elif option==4:
         TREE = True
-        L_System(0.007,'FX', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, 25).draw(6)
+        L_System(0.007,'FX', {'X': 'F-[[X]+X]^F[+FX]-X', 'F': 'FF'}, 25).draw(6)
 
         SIZE = 0.007
         XS = SIZE
         AXIOM = 'FX'
-        RULES = {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}
+        RULES = {'X': 'F-[[X]+X]^F[+FX]-X', 'F': 'FF'}
         ANGLE = 25
         ITERATE = 6
     else:
