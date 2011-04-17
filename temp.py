@@ -106,7 +106,7 @@ class L_System(GenerateList):
         if which == "line" and TREE == True:
             glBegin(GL_LINES)
             glVertex3d(0,0,0)
-            glVertex3d(0,self.offset,self.offset)
+            glVertex3d(0,self.offset,0)
             glEnd()
         elif which == "quad" :
             glBegin(GL_POLYGON)
@@ -125,7 +125,7 @@ class L_System(GenerateList):
         elif which == "line" and TREE == False:
             glBegin(GL_LINES)
             glVertex3d(0,0,0)
-            glVertex3d(self.offset,0,self.offset)
+            glVertex3d(self.offset,0,0)
             glEnd()
 #Move forward
     def forward(self):
@@ -176,7 +176,7 @@ class L_System(GenerateList):
         glLoadIdentity()
         glPushMatrix()
         glTranslatef(XS,0,0)
-        glRotated(TD, 1,0,0)
+        glRotated(TD, 0,1,0)
         print TD
         print SIZE
         #print self[index]
