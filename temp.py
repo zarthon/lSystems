@@ -25,6 +25,7 @@ SIZE=None
 ITERATE=None
 SHAPE=''
 VERT=False
+TX=0
 TD=0
 
 #Class encapsulation of world coordinates
@@ -223,7 +224,7 @@ class L_System(GenerateList):
     
     #Draw the LSystem with iter = index
     def draw(self, index):
-        global TD,XS,YS
+        global TD,XS,YS,TX
         glColor3d(colorR,colorB,colorG)
         glLineWidth(1)
         glLoadIdentity()
@@ -231,6 +232,7 @@ class L_System(GenerateList):
         glTranslatef(XS,0,0)
         glTranslatef(0,YS,0)
         glRotated(TD, 0,1,0)
+        glRotated(TX,1,0,0)
         for char in self[index]:
             if char in self.actions:
                 self.actions[char]()
@@ -441,18 +443,24 @@ def keyboard_spe(key,x,y):
 
 #Basic KeyBoard functionality for rotation and zooming
 def keyboard(key,x,y):
-    global TD,SIZE
+    global TD,SIZE,TX
     if key == chr(27):
         sys.exit(0)
-    if key == 'r': 
+    if key == 'y': 
         TD = (TD + 15)%360
-    if key == 'R':
+    if key == 'Y':
         TD = (TD - 15)%360   
         TD = -(360-TD)
     if key == 'z':
         SIZE = SIZE + (SIZE*0.05)
     if key == 'Z':
         SIZE = SIZE - (SIZE*0.05)
+    if key == 'x': 
+        TX = (TX + 15)%360
+    if key == 'X':
+        TX = (TX - 15)%360   
+        TX = -(360-TX)
+
     DrawSystem()
 
 #System Initialisation
