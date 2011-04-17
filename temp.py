@@ -508,17 +508,23 @@ def initialize():
     #gluLookAt(0.0,0.0,8.0,0.0,0.0,0.0,0.0,1.0,0.0)
 
 if __name__=='__main__':
-	glutInit(sys.argv)
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_RGB)
-	glutInitWindowSize(width, height)
-	glutInitWindowPosition(100, 100)
-	glutCreateWindow("L-Systems Generator")
-	glutReshapeFunc(reshape)
-	initialize()
-	createMenu()
-	glutDisplayFunc(display)
-	glutKeyboardFunc(keyboard)
-	glutSpecialFunc(keyboard_spe)
-	file_handle()
-	glutMainLoop()
+    glutInit(sys.argv)
+    glutInitDisplayMode(GLUT_DEPTH | GLUT_RGB)
+    glutInitWindowSize(width, height)
+    glutInitWindowPosition(100, 100)
+    glutCreateWindow("L-Systems Generator")
+    glutReshapeFunc(reshape)
+    initialize()
+    createMenu()
+    glutDisplayFunc(display)
+    glutKeyboardFunc(keyboard)
+    glutSpecialFunc(keyboard_spe)
+    print "Hit ESC to exit"
+    print "Shortcuts: "
+    print " X or x for Rotation around X axis in clockwise and anticlockwise"
+    print " Y or y for Rotation around Y axis in clockwise and anticlockwise"
+    print " z or Z for Zooming In and Zooming Out"
+    print " Arrow Keys for moving the system "
+    file_handle()
+    glutMainLoop()
 
