@@ -11,6 +11,7 @@ colorB=0.0
 colorG=0.0
 matrix = []
 FILENAME='lsystems.txt'
+
 AXIOM=None
 RULES={}
 ANGLE=None
@@ -171,10 +172,11 @@ class L_System(GenerateList):
 
 
 def display():
-	print "inside display"
-	initialize()
-	glLoadIdentity()
-	gluLookAt(0.0,0.0,5.0,0.0,0.0,0.0,0.0,1.0,0.0)
+    print "inside display"
+    initialize()
+    glLoadIdentity()
+    glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+    gluLookAt(0.0,0.0,5.0,0.0,0.0,0.0,0.0,1.0,0.0)
 
 
 def file_handle():
@@ -216,14 +218,15 @@ def onResize(w,h):
 	world_coord.r = cx + 0.5*dy * w/h
 	glMatrixMode(GL_PROJECTION)
 	glLoadIdentity()
-	gluPerspective(40.0,w/h,0.5,20.0)
+	gluPerspective(40.0,w/h,5,20.0)
 	glMatrixMode(GL_MODELVIEW)
 
 def DrawSystem():
-	global SIZE, AXIOM,RULES,ANGLE,ITERATE
-	glClear( GL_COLOR_BUFFER_BIT )
-	L_System( SIZE,AXIOM, RULES,ANGLE).draw(ITERATE)
-	return 0
+    global SIZE, AXIOM,RULES,ANGLE,ITERATE
+    glClearDepth(1.0)
+    glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+    L_System( SIZE,AXIOM, RULES,ANGLE).draw(ITERATE)
+    return 0
 
 
 def createMenu():
@@ -278,52 +281,62 @@ def colorChange(option):
 	return 0
 
 def processMenuEvents(option):
-	global SIZE,AXIOM,RULES,ANGLE,ITERATE,TREE
-	if option == 1:
-		TREE = False
-		L_System( 0.01,'FX',{'X':'X+FY','Y':'FX-Y'},90).draw(10)
-		SIZE = 0.01
-		AXIOM = 'FX'
-		RULES = {'X':'X+FY','Y':'FX-Y'}
-		ANGLE = 90
-		ITERATE = 10
-	elif option == 2:
-		TREE = False
-		L_System(0.01,'F++F++F',{'F':'F-F++F-F'},60).draw(3)
-		SIZE = 0.01
-		AXIOM = 'F++F++F'
-		RULES = {'F':'F-F++F-F'}
-		ANGLE = 60
-		ITERATE = 3
-	elif option == 3:
-		TREE = False
-		L_System(0.01,'FA', {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}, 60).draw(8)
-	elif option==4:
-		TREE = True
-		L_System(0.007,'FX', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, 25).draw(6)
-		SIZE = 0.007
-		AXIOM = 'FX'
-		RULES = {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}
-		ANGLE = 25
-		ITERATE = 6
-	else:
-		file_handle()
-	return 0
+    global SIZE,AXIOM,RULES,ANGLE,ITERATE,TREE
+    if option == 1:
+        TREE = False
+        L_System( 0.01,'FX',{'X':'X+FY','Y':'FX-Y'},90).draw(10)
+        SIZE = 0.01
+        AXIOM = 'FX'
+        RULES = {'X':'X+FY','Y':'FX-Y'}
+        ANGLE = 90
+        ITERATE = 10
+    elif option == 2:
+        TREE = False
+        L_System(0.01,'F++F++F',{'F':'F-F++F-F'},60).draw(3)
+        SIZE = 0.01
+        AXIOM = 'F++F++F'
+        RULES = {'F':'F-F++F-F'}
+        ANGLE = 60
+        ITERATE = 3
+    elif option == 3:
+        TREE = False
+        L_System(0.01,'FA', {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}, 60).draw(8)
+        SIZE = 0.01
+        AXIOM = 'FA'
+        RULES = {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}
+        ANGLE = 60
+        ITERATE = 8
+    elif option==4:
+        TREE = True
+        L_System(0.007,'FX', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, 25).draw(6)
+        SIZE = 0.007
+        AXIOM = 'FX'
+        RULES = {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}
+        ANGLE = 25
+        ITERATE = 6
+    else:
+        file_handle()
+    return 0
 
 def keyboard(key,x,y):
-	global TD
-	TD = (TD + 15)%360
-	DrawSystem()
+    global TD
+    TD = (TD + 15)%360
+    DrawSystem()
 
 def initialize():
-	global world_coord
-	glColor3d(1.0,0.0,0.0)
-	glClear (GL_COLOR_BUFFER_BIT)
-	glMatrixMode(GL_PROJECTION)
-	glLoadIdentity()
-	gluOrtho2D(world_coord.l,world_coord.r,world_coord.b,world_coord.t)
-	glMatrixMode(GL_MODELVIEW)
-	glLoadIdentity()
+    global world_coord
+    glColor3d(1.0,0.0,0.0)
+    glClearDepth(1.0)
+    glDepthFunc(GL_LESS)
+    glEnable(GL_DEPTH_TEST)
+    glDepthMask(GL_TRUE)
+    glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+#    glCullFace(GL_BACK)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    gluOrtho2D(world_coord.l,world_coord.r,world_coord.b,world_coord.t)
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
 
 if __name__=='__main__':
 	glutInit(sys.argv)
@@ -332,10 +345,10 @@ if __name__=='__main__':
 	glutInitWindowPosition(100, 100)
 	glutCreateWindow("L-Systems Generator")
 	glutReshapeFunc(onResize)
+	initialize()
 	createMenu()
 	glutDisplayFunc(display)
 	glutKeyboardFunc(keyboard)
-	initialize()
 	file_handle()
 	glutMainLoop()
 
