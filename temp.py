@@ -27,7 +27,7 @@ SHAPE=''
 VERT=False
 TX=0
 TD=0
-
+FLUSHNY = False
 #Class encapsulation of world coordinates
 class Coord:
 	def __init__(self,l=0,r=0,b=0,t=0):
@@ -176,7 +176,8 @@ class L_System(GenerateList):
             quadratic=gluNewQuadric()
             gluQuadricNormals(quadratic, GLU_SMOOTH)
             gluCylinder(quadratic,self.offset,self.offset,self.offset*3,32,32)	
-
+        if FLUSHNY == False:
+            glFlush()
     #Move forward
 
     def forward(self):
@@ -224,7 +225,7 @@ class L_System(GenerateList):
     
     #Draw the LSystem with iter = index
     def draw(self, index):
-        global TD,XS,YS,TX
+        global TD,XS,YS,TX,matrix
         glColor3d(colorR,colorB,colorG)
         glLineWidth(1)
         glLoadIdentity()
@@ -236,9 +237,10 @@ class L_System(GenerateList):
         for char in self[index]:
             if char in self.actions:
                 self.actions[char]()
-        glFlush()
+        if FLUSHNY == True:
+            glFlush()
         glPopMatrix()
-
+        matrix = []
 
 #Main Display CallBack Function
 def display():
@@ -323,29 +325,46 @@ def createMenu():
     submenu4 = glutCreateMenu(orientChange)
     glutAddMenuEntry("Horizontal",1)
     glutAddMenuEntry("Vertical",2)
-
+    submenu5 = glutCreateMenu(iterChange)
+    glutAddMenuEntry("Increase +1",1)
+    glutAddMenuEntry("Decrease -1",2)
     glutCreateMenu(processMenuEvents)
     glutAddSubMenu("color",submenu2)
     glutAddSubMenu("System",submenu1)
+    glutAddSubMenu("Iteration",submenu5)
     glutAddSubMenu("Shapes",submenu3)
     glutAddSubMenu("Orientation",submenu4)
     glutAddMenuEntry("Load File",5)
     glutAttachMenu (GLUT_RIGHT_BUTTON)
 
 
+def iterChange(option):
+    global ITERATE,FLUSHNY
+
+    if option == 1:
+        ITERATE +=1
+    if option == 2:
+        if ITERATE > 0:
+            ITERATE -=1
+    FLUSHNY = False
+    DrawSystem()
+    return 0
+
 #Change Orientation
 def orientChange(option):
-    global VERT
+    global VERT,FLUSHNY
+
     if option == 1:
         VERT = False
     elif option == 2:
         VERT = True
+    FLUSHNY = False
     DrawSystem()
     return 0
 
-#Shape Change Menu Function
+#Shape Change Msubmenuenu Function
 def shapeChange(option):
-    global SHAPE
+    global SHAPE,FLUSHNY
     if option  == 1:
         SHAPE = "line"
     elif option == 2:
@@ -358,32 +377,36 @@ def shapeChange(option):
         SHAPE ="cube"
     else:
         SHAPE = "line"
+    FLUSHNY = False
     DrawSystem()
     return 0
 
 #Global ColorChange function
 def colorChange(option):
-	global colorR, colorB, colorG
-	if option == 1:
-		colorR=1.0
-		colorB=0.0
-		colorG=0.0
-		DrawSystem()
-	elif option == 1:
-		colorR=0.9
-		colorB=0.6
-		colorG=0.5
-		DrawSystem()
-	return 0
+    global colorR, colorB, colorG,FLUSHNY
+    FLUSHNY = False
+    if option == 1:
+        colorR=1.0
+        colorB=0.0
+        colorG=0.0
+        DrawSystem()
+    elif option == 1:
+        colorR=0.9
+        colorB=0.6
+        colorG=0.5
+        DrawSystem()
+    return 0
 
 #Standard L-System Drawing Function
 
 def processMenuEvents(option):
-    global SIZE,AXIOM,RULES,ANGLE,ITERATE,VERT,XS,YS
+    global SIZE,AXIOM,RULES,ANGLE,ITERATE,VERT,XS,YS,FLUSHNY
+    FLUSHNY = False
     if option == 1:
         #DRAGON
         VERT = False
         SIZE  = 0.01
+
         #XS = SIZE
         #YS = SIZE
         AXIOM = 'FX'
@@ -411,7 +434,7 @@ def processMenuEvents(option):
         AXIOM = 'FA'
         RULES = {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}
         ANGLE = 60
-        ITERATE = 8
+        ITERATE = 5
         L_System(SIZE,AXIOM, RULES,ANGLE).draw(ITERATE)
     elif option==4:
         #Plant
@@ -430,7 +453,9 @@ def processMenuEvents(option):
 
 #0.05 addition for each shift
 def keyboard_spe(key,x,y):
-    global XS,YS
+    global XS,YS,FLUSHNY
+
+    FLUSHNY = True
     if key == GLUT_KEY_RIGHT:
         XS = XS  + (0.05)
     if key == GLUT_KEY_LEFT:
@@ -443,7 +468,8 @@ def keyboard_spe(key,x,y):
 
 #Basic KeyBoard functionality for rotation and zooming
 def keyboard(key,x,y):
-    global TD,SIZE,TX
+    global TD,SIZE,TX,FLUSHNY
+    FLUSHNY = True
     if key == chr(27):
         sys.exit(0)
     if key == 'y': 
