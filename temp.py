@@ -24,9 +24,8 @@ VARIABLES = None
 SIZE=None
 ITERATE=None
 SHAPE=''
-TREE=False
+VERT=False
 TD=0
-XZ=5
 
 #Class encapsulation of world coordinates
 class Coord:
@@ -37,8 +36,8 @@ class Coord:
 		self.b = b
 
 world_coord = Coord(-1,2,-0.5,2)
-XS = SIZE
-YS = SIZE
+XS = 0
+YS = 0
 
 #Function to apply an iteration i.e apply rules to the axiom passed to the function
 def Lindenmayer(axiom,rules):
@@ -109,57 +108,57 @@ class L_System(GenerateList):
     def drawShape(self,which):
         global SIZE,colorR, colorB, colorG
         #glColor3d(random.random(),random.random(),random.random())
-        if which == "line" and TREE == True:
+        if which == "line" and VERT == True:
             glBegin(GL_LINES)
             glVertex3d(0,0,0)
             glVertex3d(0,self.offset,0)
             glEnd()
         elif which == "quad" :
-		glBegin(GL_QUADS);			# Start Drawing The Cube
 
+            glBegin(GL_QUADS);			# Start Drawing The Cube
+            glColor3f(0.0,1.0,0.0);			# Set The Color To Blue
+            glVertex3f( self.offset, self.offset,-self.offset);		# Top Right Of The Quad (Top)
+            glVertex3f(-self.offset, self.offset,-self.offset);		# Top Left Of The Quad (Top)
+            glVertex3f(-self.offset, self.offset, self.offset);		# Bottom Left Of The Quad (Top)
+            glVertex3f( self.offset, self.offset, self.offset);		# Bottom Right Of The Quad (Top)
 
-		glColor3f(0.0,1.0,0.0);			# Set The Color To Blue
-		glVertex3f( self.offset, self.offset,-self.offset);		# Top Right Of The Quad (Top)
-		glVertex3f(-self.offset, self.offset,-self.offset);		# Top Left Of The Quad (Top)
-		glVertex3f(-self.offset, self.offset, self.offset);		# Bottom Left Of The Quad (Top)
-		glVertex3f( self.offset, self.offset, self.offset);		# Bottom Right Of The Quad (Top)
+            glColor3f(1.0,0.5,0.0);			# Set The Color To Orange
+            glVertex3f( self.offset,-self.offset, self.offset);		# Top Right Of The Quad (Bottom)
+            glVertex3f(-self.offset,-self.offset, self.offset);		# Top Left Of The Quad (Bottom)
+            glVertex3f(-self.offset,-self.offset,-self.offset);		# Bottom Left Of The Quad (Bottom)
+            glVertex3f( self.offset,-self.offset,-self.offset);		# Bottom Right Of The Quad (Bottom)
 
-		glColor3f(1.0,0.5,0.0);			# Set The Color To Orange
-		glVertex3f( self.offset,-self.offset, self.offset);		# Top Right Of The Quad (Bottom)
-		glVertex3f(-self.offset,-self.offset, self.offset);		# Top Left Of The Quad (Bottom)
-		glVertex3f(-self.offset,-self.offset,-self.offset);		# Bottom Left Of The Quad (Bottom)
-		glVertex3f( self.offset,-self.offset,-self.offset);		# Bottom Right Of The Quad (Bottom)
+            glColor3f(1.0,0.0,0.0);			# Set The Color To Red
+            glVertex3f( self.offset, self.offset, self.offset);		# Top Right Of The Quad (Front)
+            glVertex3f(-self.offset, self.offset, self.offset);		# Top Left Of The Quad (Front)
+            glVertex3f(-self.offset,-self.offset, self.offset);		# Bottom Left Of The Quad (Front)
+            glVertex3f( self.offset,-self.offset, self.offset);		# Bottom Right Of The Quad (Front)
 
-		glColor3f(1.0,0.0,0.0);			# Set The Color To Red
-		glVertex3f( self.offset, self.offset, self.offset);		# Top Right Of The Quad (Front)
-		glVertex3f(-self.offset, self.offset, self.offset);		# Top Left Of The Quad (Front)
-		glVertex3f(-self.offset,-self.offset, self.offset);		# Bottom Left Of The Quad (Front)
-		glVertex3f( self.offset,-self.offset, self.offset);		# Bottom Right Of The Quad (Front)
+            glColor3f(1.0,1.0,0.0);			# Set The Color To Yellow
+            glVertex3f( self.offset,-self.offset,-self.offset);		# Bottom Left Of The Quad (Back)
+            glVertex3f(-self.offset,-self.offset,-self.offset);		# Bottom Right Of The Quad (Back)
+            glVertex3f(-self.offset, self.offset,-self.offset);		# Top Right Of The Quad (Back)
+            glVertex3f( self.offset, self.offset,-self.offset);		# Top Left Of The Quad (Back)
 
-		glColor3f(1.0,1.0,0.0);			# Set The Color To Yellow
-		glVertex3f( self.offset,-self.offset,-self.offset);		# Bottom Left Of The Quad (Back)
-		glVertex3f(-self.offset,-self.offset,-self.offset);		# Bottom Right Of The Quad (Back)
-		glVertex3f(-self.offset, self.offset,-self.offset);		# Top Right Of The Quad (Back)
-		glVertex3f( self.offset, self.offset,-self.offset);		# Top Left Of The Quad (Back)
+            glColor3f(0.0,0.0,1.0);			# Set The Color To Blue
+            glVertex3f(-self.offset, self.offset, self.offset);		# Top Right Of The Quad (Left)
+            glVertex3f(-self.offset, self.offset,-self.offset);		# Top Left Of The Quad (Left)
+            glVertex3f(-self.offset,-self.offset,-self.offset);		# Bottom Left Of The Quad (Left)
+            glVertex3f(-self.offset,-self.offset, self.offset);		# Bottom Right Of The Quad (Left)
 
-		glColor3f(0.0,0.0,1.0);			# Set The Color To Blue
-		glVertex3f(-self.offset, self.offset, self.offset);		# Top Right Of The Quad (Left)
-		glVertex3f(-self.offset, self.offset,-self.offset);		# Top Left Of The Quad (Left)
-		glVertex3f(-self.offset,-self.offset,-self.offset);		# Bottom Left Of The Quad (Left)
-		glVertex3f(-self.offset,-self.offset, self.offset);		# Bottom Right Of The Quad (Left)
-
-		glColor3f(1.0,0.0,1.0);			# Set The Color To Violet
-		glVertex3f( self.offset, self.offset,-self.offset);		# Top Right Of The Quad (Right)
-		glVertex3f( self.offset, self.offset, self.offset);		# Top Left Of The Quad (Right)
-		glVertex3f( self.offset,-self.offset, self.offset);		# Bottom Left Of The Quad (Right)
-		glVertex3f( self.offset,-self.offset,-self.offset);		# Bottom Right Of The Quad (Right)
-		glEnd();				# Done Drawing The Quad
-            #glBegin(GL_POLYGON)
-            #glVertex2d(0,0)
-            #glVertex2d(self.offset,0)
-            #glVertex2d(self.offset,self.offset)
-            #glVertex2d(0,self.offset)
-            #glEnd()
+            glColor3f(1.0,0.0,1.0);			# Set The Color To Violet
+            glVertex3f( self.offset, self.offset,-self.offset);		# Top Right Of The Quad (Right)
+            glVertex3f( self.offset, self.offset, self.offset);		# Top Left Of The Quad (Right)
+            glVertex3f( self.offset,-self.offset, self.offset);		# Bottom Left Of The Quad (Right)
+            glVertex3f( self.offset,-self.offset,-self.offset);		# Bottom Right Of The Quad (Right)
+            glEnd();				# Done Drawing The Quad
+        elif which == "square":
+            glBegin(GL_POLYGON)
+            glVertex2d(0,0)
+            glVertex2d(self.offset,0)
+            glVertex2d(self.offset,self.offset)
+            glVertex2d(0,self.offset)
+            glEnd()
         elif which=="circle" :
             glBegin(GL_LINE_LOOP)
             for ang in range(0, 360, 5):
@@ -167,40 +166,45 @@ class L_System(GenerateList):
                 y = sin(ang*pi/180)*SIZE
                 glVertex2d(x, y)
             glEnd()
-        elif which == "line" and TREE == False:
+        elif which == "line" and VERT == False:
             glBegin(GL_LINES)
             glVertex3d(0,0,0)
             glVertex3d(self.offset,0,0)
             glEnd()
-	elif which=="cylinder":
-		quadratic=gluNewQuadric()
-		gluQuadricNormals(quadratic, GLU_SMOOTH)
-		gluCylinder(quadratic,self.offset,self.offset,self.offset*3,32,32)	
-#Move forward
+        elif which=="cylinder":
+            quadratic=gluNewQuadric()
+            gluQuadricNormals(quadratic, GLU_SMOOTH)
+            gluCylinder(quadratic,self.offset,self.offset,self.offset*3,32,32)	
+
+    #Move forward
+
     def forward(self):
 		global SHAPE
 		self.drawShape(SHAPE)
-		if TREE==True:
+		if VERT==True:
 			glTranslatef(0,self.offset,0)
 		else:
 			glTranslatef(self.offset,0,0)
-#Rotate Right
+
+    #Rotate Right
     def right(self): glRotated(self.angle,0,0,1)
 
-#Rotate Left
+    #Rotate Left
     def left(self): glRotated(-self.angle,0,0,1)
 
-#Jump forward without drawing
+    #Jump forward without drawing
     def go(self):
-		if TREE==True:
+		if VERT==True:
 			glTranslatef(0,self.offset,0)
 		else:
 			glTranslatef(self.offset,0,0)
+
     #Save the state
     def save(self):
 		global matrix
 		temp = glGetFloatv(GL_MODELVIEW_MATRIX)
 		matrix.append(temp)
+
 	#Restore the last saved state
     def restore(self):
 		global matrix
@@ -217,26 +221,25 @@ class L_System(GenerateList):
 	
     def update(self): pass
     
-#Draw the LSystem with iter = index
+    #Draw the LSystem with iter = index
     def draw(self, index):
         global TD,XS,YS
         glColor3d(colorR,colorB,colorG)
         glLineWidth(1)
         glLoadIdentity()
         glPushMatrix()
+        print XS,YS,TD
         glTranslatef(XS,0,0)
         glTranslatef(0,YS,0)
         glRotated(TD, 0,1,0)
-        print TD
-        print SIZE
-        #print self[index]
         for char in self[index]:
             if char in self.actions:
                 self.actions[char]()
-	glFlush()
+        glFlush()
         glPopMatrix()
 
 
+#Main Display CallBack Function
 def display():
     print "inside display"
     initialize()
@@ -244,14 +247,16 @@ def display():
     glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
     gluLookAt(0.0,0.0,8.0,0.0,0.0,0.0,0.0,1.0,0.0)
 
-
+#File Handle function to parse the file
 def file_handle():
     try:
-        global AXIOM,RULES,ANGLE,SIZE,ITERATE,SHAPE,XS,TREE,YS
+        global AXIOM,RULES,ANGLE,SIZE,ITERATE,SHAPE,XS,VERT,YS
         fin = open(FILENAME,"r")
         lineList = fin.readlines()
         fin.close()
-	TREE=True
+
+    	VERT=True
+        print "Inside File Handle"
         for line in lineList:
             temp = line.split(";")
             if temp[0] == "Va":
@@ -265,8 +270,8 @@ def file_handle():
                 ANGLE = int(temp[1].rstrip()) 
             elif temp[0] == "Si":
                 SIZE = float(temp[1].rstrip())
-                XS = SIZE
-                YS = SIZE
+                #XS = SIZE
+                #YS = SIZE
             elif temp[0] == "It":
                 ITERATE = int(temp[1].rstrip())
             elif temp[0] == "Sh":
@@ -274,10 +279,12 @@ def file_handle():
     except IOError:
         print "File Not Found"
         sys_exit(1)
+    print XS, YS
     DrawSystem()
     return 0
 
-def onResize(w,h):
+#Call Back function for reshape
+def reshape(w,h):
     global width,height,world_coord
     width,height = (w,h)
     glViewport(0,0,w,h)
@@ -291,6 +298,7 @@ def onResize(w,h):
     gluPerspective(40.0,w/h,5,20.0)
     glMatrixMode(GL_MODELVIEW)
 
+#Main function to draw an L-System
 def DrawSystem():
     global SIZE, AXIOM,RULES,ANGLE,ITERATE
     glClearDepth(1.0)
@@ -298,7 +306,7 @@ def DrawSystem():
     L_System( SIZE,AXIOM, RULES,ANGLE).draw(ITERATE)
     return 0
 
-
+#RightClick Menu
 def createMenu():
 	submenu1 = glutCreateMenu(processMenuEvents)
 	glutAddMenuEntry("Dragon",1)
@@ -318,88 +326,92 @@ def createMenu():
 	glutAddSubMenu("System",submenu1)
 	glutAddSubMenu("Shapes",submenu3)
 	glutAddMenuEntry("Load File",5)
-	glutAttachMenu (GLUT_MIDDLE_BUTTON)
+	glutAttachMenu (GLUT_RIGHT_BUTTON)
 
+#Shape Change Menu Function
 def shapeChange(option):
 	global SHAPE
 	if option  == 1:
 		SHAPE = "line"
 	elif option == 2:
-		print "INSIDE shapeChange"
 		SHAPE = "circle"
 	elif option == 3:
-		SHAPE = "quad"
+		SHAPE = "square"
 	elif option==4:
 		SHAPE="cylinder"
 	else:
-		print "INSIDE shapeChange else"
 		SHAPE = "line"
 	DrawSystem()
 	return 0
-	
+
+#Global ColorChange function
 def colorChange(option):
 	global colorR, colorB, colorG
 	if option == 4:
 		colorR=1.0
 		colorB=0.0
 		colorG=0.0
-		print "Colorchange"
 		DrawSystem()
 	elif option == 5:
 		colorR=0.9
 		colorB=0.6
 		colorG=0.5
-		print "Colorchange"
 		DrawSystem()
 	return 0
 
+#Standard L-System Drawing Function
+
 def processMenuEvents(option):
-    global SIZE,AXIOM,RULES,ANGLE,ITERATE,TREE,XS,YS
+    global SIZE,AXIOM,RULES,ANGLE,ITERATE,VERT,XS,YS
     if option == 1:
-        TREE = False
-        L_System( 0.01,'FX',{'X':'X+FY','Y':'FX-Y'},90).draw(10)
+        #DRAGON
+        VERT = False
         SIZE  = 0.01
-        XS = SIZE
-        YS = SIZE
+        #XS = SIZE
+        #YS = SIZE
         AXIOM = 'FX'
-        RULES = {'X':'X+FY','Y':'FX-Y'}
+        RULES = {'X':'X+YF','Y':'FX-Y'}
         ANGLE = 90
         ITERATE = 10
+        L_System( SIZE,AXIOM,RULES,ANGLE).draw(ITERATE)
     elif option == 2:
-        TREE = False
-        L_System(0.01,'F++F++F',{'F':'F-F++F-F'},60).draw(3)
+        #SnowFlake
+        VERT = False
         SIZE = 0.01
-        XS = SIZE
-        YS = SIZE
+        #XS = SIZE
+        #YS = SIZE
         AXIOM = 'F++F++F'
         RULES = {'F':'F-F++F-F'}
         ANGLE = 60
         ITERATE = 3
+        L_System(SIZE,AXIOM,RULES,ANGLE).draw(ITERATE)
     elif option == 3:
-        TREE = False
-        L_System(0.01,'FA', {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}, 60).draw(4)
+        #Sierpinski
+        VERT = False
         SIZE = 0.01
-        XS = SIZE
-        YS = SIZE
+        #XS = SIZE
+        #YS = SIZE
         AXIOM = 'FA'
         RULES = {'FA': 'FB-FA-FB', 'FB': 'FA+FB+FA'}
         ANGLE = 60
         ITERATE = 8
+        L_System(SIZE,AXIOM, RULES,ANGLE).draw(ITERATE)
     elif option==4:
-        TREE = True
-        L_System(0.007,'FX', {'X': 'F&[[X]+X]^F[+FX]-X', 'F': 'FF'}, 25).draw(4)
-
-        SIZE = 0.007
-        XS = SIZE
-        YS = SIZE
+        #Plant
+        VERT = True
+        SIZE = 0.01
+        #XS = SIZE
+        #YS = SIZE
         AXIOM = 'FX'
-        RULES = {'X': 'F&[[X]+X]^F[+FX]-X', 'F': 'FF'}
+        RULES = {'X': 'F&[[X]+X]+F[+FX]-X', 'F': 'FF'}
         ANGLE = 25
-        ITERATE = 4
+        ITERATE = 3
+        L_System(SIZE,AXIOM,RULES,ANGLE).draw(ITERATE)
     else:
         file_handle()
     return 0
 
+#0.05 addition for each shift
 def keyboard_spe(key,x,y):
     global XS,YS
     if key == GLUT_KEY_RIGHT:
@@ -410,11 +422,11 @@ def keyboard_spe(key,x,y):
         YS = YS + (0.05)
     if key == GLUT_KEY_DOWN:
         YS = YS - (0.05)
-
     DrawSystem()
 
+#Basic KeyBoard functionality for rotation and zooming
 def keyboard(key,x,y):
-    global TD,SIZE,XZ
+    global TD,SIZE
     if key == chr(27):
         sys.exit(0)
     if key == 'r': 
@@ -428,7 +440,8 @@ def keyboard(key,x,y):
     if key == 'Z':
         SIZE = SIZE - (SIZE*0.05)
     DrawSystem()
-    
+
+#System Initialisation
 def initialize():
     global world_coord
     glColor3d(1.0,0.0,0.0)
@@ -452,7 +465,7 @@ if __name__=='__main__':
 	glutInitWindowSize(width, height)
 	glutInitWindowPosition(100, 100)
 	glutCreateWindow("L-Systems Generator")
-	glutReshapeFunc(onResize)
+	glutReshapeFunc(reshape)
 	initialize()
 	createMenu()
 	glutDisplayFunc(display)
