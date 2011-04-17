@@ -176,7 +176,7 @@ class L_System(GenerateList):
         glLoadIdentity()
         glPushMatrix()
         glTranslatef(XS,0,0)
-        glRotated(TD, 0,1,0)
+        glRotated(TD, 1,0,0)
         print TD
         print SIZE
         #print self[index]
@@ -356,9 +356,9 @@ def keyboard(key,x,y):
     if key == 'Z':
         SIZE = SIZE - (SIZE*0.05)
     if key == 's':
-        XS = XS  + (SIZE*0.05)
+        XS = XS  + (0.05)
     if key == 'S':
-        XS = XS - (SIZE*0.05)
+        XS = XS - (0.05)
 
     DrawSystem()
 
