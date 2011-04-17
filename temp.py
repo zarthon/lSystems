@@ -308,25 +308,42 @@ def DrawSystem():
 
 #RightClick Menu
 def createMenu():
-	submenu1 = glutCreateMenu(processMenuEvents)
-	glutAddMenuEntry("Dragon",1)
-	glutAddMenuEntry("Snowflake",2)
-	glutAddMenuEntry("Sierpinsky",3)
-	glutAddMenuEntry("Plant",4)
-	submenu2 = glutCreateMenu(colorChange)
-	glutAddMenuEntry("Red",4)
-	glutAddMenuEntry("Orange",5)
-	submenu3 = glutCreateMenu(shapeChange)
-	glutAddMenuEntry("Line",1)
-	glutAddMenuEntry("Circle",2)
-	glutAddMenuEntry("Square",3)
-	glutAddMenuEntry("Cylinder",4)
-	glutCreateMenu(processMenuEvents)
-	glutAddSubMenu("color",submenu2)
-	glutAddSubMenu("System",submenu1)
-	glutAddSubMenu("Shapes",submenu3)
-	glutAddMenuEntry("Load File",5)
-	glutAttachMenu (GLUT_RIGHT_BUTTON)
+    print "inside create menu"
+    submenu1 = glutCreateMenu(processMenuEvents)
+    glutAddMenuEntry("Dragon",1)
+    glutAddMenuEntry("Snowflake",2)
+    glutAddMenuEntry("Sierpinsky",3)
+    glutAddMenuEntry("Plant",4)
+    submenu2 = glutCreateMenu(colorChange)
+    glutAddMenuEntry("Red",1)
+    glutAddMenuEntry("Orange",2)
+    submenu3 = glutCreateMenu(shapeChange)
+    glutAddMenuEntry("Line",1)
+    glutAddMenuEntry("Circle",2)
+    glutAddMenuEntry("Square",3)
+    glutAddMenuEntry("Cylinder",4)
+    submenu4 = glutCreateMenu(orientChange)
+    glutAddMenuEntry("Horizontal",1)
+    glutAddMenuEntry("Vertical",2)
+
+    glutCreateMenu(processMenuEvents)
+    glutAddSubMenu("color",submenu2)
+    glutAddSubMenu("System",submenu1)
+    glutAddSubMenu("Shapes",submenu3)
+    glutAddSubMenu("Orientation",submenu4)
+    glutAddMenuEntry("Load File",5)
+    glutAttachMenu (GLUT_RIGHT_BUTTON)
+
+
+#Change Orientation
+def orientChange(option):
+    global VERT
+    if option == 1:
+        VERT = False
+    elif option == 2:
+        VERT = True
+    DrawSystem()
+    return 0
 
 #Shape Change Menu Function
 def shapeChange(option):
@@ -347,12 +364,12 @@ def shapeChange(option):
 #Global ColorChange function
 def colorChange(option):
 	global colorR, colorB, colorG
-	if option == 4:
+	if option == 1:
 		colorR=1.0
 		colorB=0.0
 		colorG=0.0
 		DrawSystem()
-	elif option == 5:
+	elif option == 1:
 		colorR=0.9
 		colorB=0.6
 		colorG=0.5
