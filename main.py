@@ -407,7 +407,7 @@ def colorChange(option):
 #Standard L-System Drawing Function
 
 def processMenuEvents(option):
-    global SIZE,AXIOM,RULES,ANGLE,ITERATE,VERT,XS,YS,FLUSHNY
+    global SIZE,AXIOM,RULES,ANGLE,ITERATE,VERT,XS,YS,FLUSHNY,FILENAME
     FLUSHNY = False
     if option == 1:
         #DRAGON
@@ -455,6 +455,8 @@ def processMenuEvents(option):
         ITERATE = 3
         L_System(SIZE,AXIOM,RULES,ANGLE).draw(ITERATE)
     else:
+        FILENAME = 'lsystems.txt'
+
         file_handle()
     return 0
 
