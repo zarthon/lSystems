@@ -22,6 +22,9 @@ Requirements:
 You can start by running main.py file, if you want to load an example system, you can do so by passing the name of the
 system as an arguement to the main.py file while running it.
 
+The system has been developed and tested in Linux environment so while running in winodws there might some glitches in
+rendering speed and viewing
+
 Example
 =======
 
