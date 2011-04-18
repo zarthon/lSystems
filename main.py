@@ -17,7 +17,7 @@ matrix = []
 
 #Parameters to draw the L-System is declared
 try:
-	FILENAME=sys.argv[1]
+	FILENAME='examples/'+sys.argv[1]+'.txt'
 except IndexError:
 	print 'No config file supplied. Select a system from right-click menu.'
 	FILENAME=''
@@ -521,7 +521,7 @@ if __name__=='__main__':
     glutInitWindowPosition(100, 100)
     glutCreateWindow("L-Systems Generator")
     glutReshapeFunc(reshape)
-    initialize()
+    #initialize()
     createMenu()
     glutDisplayFunc(display)
     glutKeyboardFunc(keyboard)
@@ -534,10 +534,5 @@ if __name__=='__main__':
     print " z or Z for Zooming In and Zooming Out"
     print " Arrow Keys for moving the system "
     file_handle()
-    glColor3f(1.0,0.5,0.0)
-    glBegin(GL_LINES)
-    glVertex3d(2,0,0)
-    glVertex3d(2,10,0)
-    glEnd()
     glutMainLoop()
 
