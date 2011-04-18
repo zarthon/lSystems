@@ -1,4 +1,7 @@
---- is a simple L-System Generator written in Python using PyOpenGL
+lSystems
+==========
+
+lSystems is a simple L-System Generator written in Python using PyOpenGL
 It was made by Mohit Kothari(mohitrajkothari@gmail.com) and Viranch Mehta(viranch.mehta@gmail.com) for a 3rd Computer
 Graphics course.
 
@@ -7,11 +10,37 @@ This was our fist hand try on OpenGL.
 Requirements:
 =============
 -Python >2.5
--PyOpenGL (GLU, GLUT, GLE)
--numpy
+-PyOpenGL (GLU, GLUT, GLE) 
+-python2-numpy > 1.5
 
-You can start by running (MAIN) file, on first run it will automatically read from "lsystems.txt" file and create the
+You can start by running main.py file, if you want to load an example system, you can do so by passing the name of the
+system as an arguement to the main.py file while running it.
+
+Example
+=======
+
+<python2 main.py koch_cubes>
+
+Here is the list of available example systems:-
+
+* gosper
+* islands_lakes
+* koch_moss
+* peano
+* sierpinski_median
+* tetra_dragon
+* hex_tile
+* koch_cubes
+* _lsystems (sample)
+* pentigree
+* quad_koch
+* square_sierpinski
+
+
+You can also create your own lsystem by defining certain parameters and saving as .txt file in example_systems.
 L-System. The Syntax for file is as follows:-
+####MEANS COMMENTS NOT TO BE INCLUDED IN THE .txt FILE
+=====================================================
 
 Va;<list of all variables without seperation>
 Ax;<Axiom of the System>
@@ -21,7 +50,10 @@ Ru;<Rule of system>
 An;<Angle>
 Si;<size> ###between 0 and 1####
 It;<iteration> ###number of iterations to be performed####
-Sh;<shape>###choose from the list [quad,line,circle]####
+Sh;<shape>###choose from the list [square,line,circle,cube,cylinder]###    
+========================================================================
 
-There is also menu available which gives you several options, menu can be opened by right click
+There is also menu available which gives you several options, menu can be opened by right click.
+You can move the system using arrow keys and rotate it using 'x' or 'X' or 'Y' or 'y'
+Zoom feature is also available, to use it press 'z' or 'Z'
 

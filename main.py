@@ -17,7 +17,8 @@ matrix = []
 
 #Parameters to draw the L-System is declared
 try:
-	FILENAME='examples/'+sys.argv[1]+'.txt'
+    FILENAME='example_systems/'+sys.argv[1]+'.txt'
+    print FILENAME
 except IndexError:
 	print 'No config file supplied. Select a system from right-click menu.'
 	FILENAME=''
@@ -275,6 +276,9 @@ def file_handle():
                 ANGLE = int(temp[1].rstrip()) 
             elif temp[0] == "Si":
                 SIZE = float(temp[1].rstrip())
+                if SIZE > 0.9:
+                    SIZE = 0.01
+                    print "SIZE IS TOO LARGE HENCE ASSIGNING DEFAULT 0.01 VALUE"
                 #XS = SIZE
                 #YS = SIZE
             elif temp[0] == "It":
