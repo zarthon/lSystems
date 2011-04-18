@@ -28,7 +28,7 @@ ANGLE=None
 VARIABLES = None
 SIZE=None
 ITERATE=None
-SHAPE=''
+SHAPE='line'
 VERT=False
 TX=0
 TD=0
@@ -449,8 +449,8 @@ def processMenuEvents(option):
         SIZE = 0.01
         #XS = SIZE
         #YS = SIZE
-        AXIOM = 'FX'
-        RULES = {'X': 'F&[[X]+X]+F[+FX]-X', 'F': 'FF'}
+        AXIOM = 'X'
+        RULES = {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}
         ANGLE = 25
         ITERATE = 3
         L_System(SIZE,AXIOM,RULES,ANGLE).draw(ITERATE)

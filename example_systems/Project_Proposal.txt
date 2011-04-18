@@ -1,9 +1,0 @@
-
-Techniques used:    
-    Using Primitive of OpenGL to create different Primitives like circle and allow user more mobility
-    Matrix Concepts taight in class for translation and rotation of axis
-    Menu Creation and intefacing
-    File handling in python
-    Usage of different Python functions like reduce and genrative functions to generate the actual lSystems iterations
-
-GLU offeres a lot of functions for curves
