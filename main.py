@@ -239,9 +239,12 @@ class L_System(GenerateList):
         glTranslatef(0,YS,0)
         glRotated(TD, 0,1,0)
         glRotated(TX,1,0,0)
-        for char in self[index]:
-            if char in self.actions:
-                self.actions[char]()
+        for i in range(0,index):
+            glLoadIdentity()
+            glColor3d(random.random(),random.random(),random.random())
+            for char in self[i]:
+                if char in self.actions:
+                    self.actions[char]()
         if FLUSHNY == True:
             glFlush()
         glPopMatrix()

@@ -1,7 +1,7 @@
 Va;F
-Ax;F-F-F-F-F
-Ru;F:F-F++F+F-F-F
+Ax;F
+Ru;F:F+F+FF-F-F
 Sh;line
 Si;0.01
-An;72
-It;3
+An;90
+It;1

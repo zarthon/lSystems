@@ -11,7 +11,7 @@ lSystems is a simple L-System Generator written in Python using PyOpenGL
 It was made by Mohit Kothari(mohitrajkothari@gmail.com) and Viranch Mehta(viranch.mehta@gmail.com) for a 3rd Computer
 Graphics course.
 
-This was our fist hand try on OpenGL.
+This was our first hand try on OpenGL.
 
 Requirements:
 =============
@@ -65,5 +65,5 @@ Sh;<shape>###choose from the list [square,line,circle,cube,cylinder]###
 There is also menu available which gives you several options, menu can be opened by right click.
 You can move the system using arrow keys and rotate it using 'x' or 'X' or 'Y' or 'y'
 Zoom feature is also available, to use it press 'z' or 'Z'
-The Load File option in MENU will load lsystems.txt from current directory. So you can also modify this file and use it.
+The Load File option in MENU will load 'lsystems.txt' from current directory. So you can also modify this file and use it.
 
