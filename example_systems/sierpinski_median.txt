@@ -5,4 +5,4 @@ Ru;B:-B+F+B-
 Sh;line
 Si;0.01
 An;45
-It;12
+It;8

@@ -1,3 +1,5 @@
+#!/usr/bin/python2
+
 import sys
 from math import *
 from OpenGL.GL import *
@@ -233,21 +235,20 @@ class L_System(GenerateList):
         global TD,XS,YS,TX,matrix
         glColor3d(colorR,colorB,colorG)
         glLineWidth(1)
-        glLoadIdentity()
-        glPushMatrix()
-        glTranslatef(XS,0,0)
-        glTranslatef(0,YS,0)
-        glRotated(TD, 0,1,0)
-        glRotated(TX,1,0,0)
         for i in range(0,index):
             glLoadIdentity()
+            glPushMatrix()
+            glTranslatef(XS,0,0)
+            glTranslatef(0,YS,0)
+            glRotated(TD, 0,1,0)
+            glRotated(TX,1,0,0)
             glColor3d(random.random(),random.random(),random.random())
             for char in self[i]:
                 if char in self.actions:
                     self.actions[char]()
+            glPopMatrix()
         if FLUSHNY == True:
             glFlush()
-        glPopMatrix()
         matrix = []
 
 #Main Display CallBack Function
